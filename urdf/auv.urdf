@@ -1,0 +1,677 @@
+<?xml version="1.0"?>
+
+<robot name="my_auv">
+
+  <!-- ========================= -->
+  <!-- Main AUV body             -->
+  <!-- ========================= -->
+
+  <link name="base_link">
+
+    <visual>
+	<origin 
+    xyz="0 0 0"
+    rpy="0 0 1.5708"/>
+      <geometry>
+        <mesh
+        filename="package://auv_sim/meshes/auv_body.stl"
+        scale="1 1 1"/>
+      </geometry>
+
+      <material name="body_gray">
+        <color rgba="0.65 0.65 0.65 1.0"/>
+      </material>
+    </visual>
+
+    <collision name="main_hull_collision">
+      <origin xyz="0 0 0" rpy="0 1.5708 0"/>
+
+      <geometry>
+        <cylinder
+          radius="0.055"
+          length="1.046"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <mass value="4.3556"/>
+
+      <inertia
+        ixx="0.01515"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="0.30780"
+        iyz="0.0"
+        izz="0.31675"/>
+    </inertial>
+
+  </link>
+
+  <!-- ========================= -->
+  <!-- Center internal ballast    -->
+  <!-- ========================= -->
+
+  <link name="center_ballast">
+
+    <inertial>
+      <origin xyz="0 0 0"/>
+
+      <mass value="4.65"/>
+
+      <inertia
+        ixx="0.01"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="0.01"
+        iyz="0.0"
+        izz="0.01"/>
+    </inertial>
+
+  </link>
+
+  <joint name="center_ballast_joint" type="fixed">
+
+    <parent link="base_link"/>
+    <child link="center_ballast"/>
+
+    <origin xyz="0 0 -0.035" rpy="0 0 0"/>
+
+  </joint>
+
+  <!-- ========================= -->
+  <!-- Rear internal ballast     -->
+  <!-- ========================= -->
+
+  <link name="rear_ballast">
+
+    <inertial>
+      <origin xyz="0 0 0"/>
+
+      <mass value="2.15"/>
+
+      <inertia
+        ixx="0.01"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="0.01"
+        iyz="0.0"
+        izz="0.01"/>
+    </inertial>
+
+  </link>
+
+  <joint name="rear_ballast_joint" type="fixed">
+
+    <parent link="base_link"/>
+    <child link="rear_ballast"/>
+
+    <origin xyz="-0.50 0 -0.035" rpy="0 0 0"/>
+
+  </joint>
+
+  <!-- ========================= -->
+  <!-- IMU sensor                -->
+  <!-- ========================= -->
+
+  <gazebo reference="base_link">
+
+    <sensor name="auv_imu" type="imu">
+
+      <always_on>true</always_on>
+
+      <update_rate>100</update_rate>
+
+      <topic>imu</topic>
+
+      <visualize>false</visualize>
+
+    </sensor>
+
+  </gazebo>
+
+  <!-- ========================= -->
+  <!-- Left elevator fin         -->
+  <!-- ========================= -->
+
+  <link name="left_fin">
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 1.5708"/>
+
+      <geometry>
+        <mesh filename="package://auv_sim/meshes/Left_fin.stl"/>
+      </geometry>
+
+    <material name="hotrod_red">
+      <color rgba="0.75 0.02 0.02 1.0"/>
+    </material>
+  </visual>
+
+    <collision>
+      <origin xyz="0 0.15 0"/>
+      <geometry>
+        <box size="0.30 0.20 0.01"/>
+      </geometry>
+
+    </collision>
+
+    <inertial>
+
+      <mass value="0.164"/>
+
+      <inertia
+        ixx="0.001"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="0.001"
+        iyz="0.0"
+        izz="0.001"/>
+
+    </inertial>
+
+  </link>
+
+  <!-- ========================= -->
+  <!-- Right elevator fin         -->
+  <!-- ========================= -->
+
+  <link name="right_fin">
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 1.5708"/>
+
+      <geometry>
+        <mesh filename="package://auv_sim/meshes/Right_fin.stl"/>
+      </geometry>
+
+    <material name="hotrod_red">
+      <color rgba="0.75 0.02 0.02 1.0"/>
+    </material>
+  </visual>
+
+    <collision>
+      <origin xyz="0 -0.15 0"/>
+      <geometry>
+        <box size="0.30 0.20 0.01"/>
+      </geometry>
+
+    </collision>
+
+    <inertial>
+
+      <mass value="0.164"/>
+
+      <inertia
+        ixx="0.001"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="0.001"
+        iyz="0.0"
+        izz="0.001"/>
+
+    </inertial>
+
+  </link>
+
+  <!-- ========================= -->
+  <!-- Left rear U1 thruster     -->
+  <!-- ========================= -->
+
+  <link name="left_thruster">
+
+    <visual>
+      <origin rpy="0 1.5708 1.5708"/>
+
+      <geometry>
+        <mesh filename="package://auv_sim/meshes/Left_thruster_hull.stl"/>
+      </geometry>
+
+      <material name="thruster_color">
+        <color rgba="0.0 0.1 0.0 1.0"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin rpy="0 1.5708 0"/>
+
+      <geometry>
+        <cylinder radius="0.0375" length="0.075"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <mass value="0.0781"/>
+
+      <inertia
+        ixx="0.0002"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="0.0002"
+        iyz="0.0"
+        izz="0.0002"/>
+    </inertial>
+
+  </link>
+
+  <!-- ========================= -->
+  <!-- Left U1 propeller        -->
+  <!-- ========================= -->
+
+  <link name="left_propeller">
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 -1.5708"/>
+      <geometry>
+        <mesh filename="package://auv_sim/meshes/Left_thruster_motor.stl"/>
+      </geometry>
+
+      <material name="propeller_color">
+        <color rgba="0.75 0.75 0.78 1.0"/>
+      </material>
+    </visual>
+
+    <inertial>
+      <mass value="0.0801"/>
+
+      <inertia
+        ixx="0.00001"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="0.00001"
+        iyz="0.0"
+        izz="0.00001"/>
+    </inertial>
+
+  </link>
+
+  <!-- ========================= -->
+  <!-- Right rear U1 thruster    -->
+  <!-- ========================= -->
+
+  <link name="right_thruster">
+
+      <visual>
+        <origin rpy="0 -1.5708 1.5708"/>
+
+      <geometry>
+        <mesh filename="package://auv_sim/meshes/Right_thruster_hull.stl"/>
+      </geometry>
+
+        <material name="thruster_color">
+          <color rgba="0.0 0.1 0.0 1.0"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin rpy="0 1.5708 0"/>
+
+        <geometry>
+          <cylinder radius="0.0375" length="0.075"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="0.0781"/>
+
+        <inertia
+          ixx="0.0002"
+          ixy="0.0"
+          ixz="0.0"
+          iyy="0.0002"
+          iyz="0.0"
+          izz="0.0002"/>
+      </inertial>
+
+    </link>
+
+  <!-- ========================= -->
+  <!-- Right U1 propeller       -->
+  <!-- ========================= -->
+
+  <link name="right_propeller">
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 -1.5708"/>
+      <geometry>
+        <mesh filename="package://auv_sim/meshes/Right_thruster_motor.stl"/>
+      </geometry>
+
+      <material name="propeller_color">
+        <color rgba="0.75 0.75 0.78 1.0"/>
+      </material>
+    </visual>
+
+    <inertial>
+      <mass value="0.0801"/>
+
+      <inertia
+        ixx="0.00001"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="0.00001"
+        iyz="0.0"
+        izz="0.00001"/>
+    </inertial>
+
+  </link>
+
+  <!-- ========================= -->
+  <!-- Fin joint                 -->
+  <!-- ========================= -->
+
+  <joint name="left_fin_joint"
+         type="revolute">
+
+    <parent link="base_link"/>
+
+    <child link="left_fin"/>
+
+    <!-- Position of fin relative to body -->
+    <origin xyz="-0.81510 0.06980 0.0"
+            rpy="0 0 0"/>
+
+    <!-- Axis of rotation -->
+    <axis xyz="0 1 0"/>
+
+    <!-- Servo limits -->
+    <limit
+      lower="-0.5"
+      upper="0.5"
+      effort="10"
+      velocity="2"/>
+
+  </joint>
+
+  <joint name="right_fin_joint"
+         type="revolute">
+
+    <parent link="base_link"/>
+
+    <child link="right_fin"/>
+
+    <!-- Position of fin relative to body -->
+    <origin xyz="-0.81510 -0.06980 0.0"
+            rpy="0 0 0"/>
+
+    <!-- Axis of rotation -->
+    <axis xyz="0 1 0"/>
+
+    <!-- Servo limits -->
+    <limit
+      lower="-0.5"
+      upper="0.5"
+      effort="10"
+      velocity="2"/>
+
+  </joint>
+
+  <joint name="left_thruster_joint" type="fixed">
+
+    <parent link="base_link"/>
+    <child link="left_thruster"/>
+
+    <origin xyz="-1.03199 0.108239 0.0" rpy="0 0 0"/>
+
+  </joint>
+
+  <joint name="left_propeller_joint" type="continuous">
+
+    <parent link="left_thruster"/>
+    <child link="left_propeller"/>
+
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+
+    <axis xyz="1 0 0"/>
+
+  </joint>
+
+  <joint name="right_thruster_joint" type="fixed">
+
+    <parent link="base_link"/>
+    <child link="right_thruster"/>
+
+    <origin xyz="-1.03199 -0.108239 0.0" rpy="0 0 0"/>
+
+  </joint>
+
+  <joint name="right_propeller_joint" type="continuous">
+
+    <parent link="right_thruster"/>
+    <child link="right_propeller"/>
+
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+
+    <axis xyz="1 0 0"/>
+
+  </joint>
+
+  <ros2_control name="GazeboSimSystem" type="system">
+    <hardware>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+    </hardware>
+
+    <joint name="left_fin_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="right_fin_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+  </ros2_control>
+
+  <gazebo>
+    <plugin
+      filename="libgz_ros2_control-system.so"
+      name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>/home/ghalih-a-salamun/auv_ws/src/auv_sim/config/controllers.yaml</parameters>
+    </plugin>
+
+    <!-- ========================= -->
+    <!-- Fixed stabilizer +Y side  -->
+    <!-- ========================= -->
+
+    <plugin
+      filename="gz-sim-lift-drag-system"
+      name="gz::sim::systems::LiftDrag">
+
+      <air_density>1000</air_density>
+
+      <cla>2.0</cla>
+      <cla_stall>-1.1</cla_stall>
+
+      <cda>0.2</cda>
+      <cda_stall>0.03</cda_stall>
+
+      <alpha_stall>0.17</alpha_stall>
+
+      <a0>0</a0>
+
+      <area>0.004267</area>
+
+      <forward>1 0 0</forward>
+      <upward>0 0 1</upward>
+
+      <link_name>base_link</link_name>
+
+      <cp>-0.18961 0.08444 0</cp>
+
+    </plugin>
+
+
+    <!-- ========================= -->
+    <!-- Fixed stabilizer -Y side  -->
+    <!-- ========================= -->
+
+    <plugin
+      filename="gz-sim-lift-drag-system"
+      name="gz::sim::systems::LiftDrag">
+
+      <air_density>1000</air_density>
+
+      <cla>2.0</cla>
+      <cla_stall>-1.1</cla_stall>
+
+      <cda>0.2</cda>
+      <cda_stall>0.03</cda_stall>
+
+      <alpha_stall>0.17</alpha_stall>
+
+      <a0>0</a0>
+
+      <area>0.004267</area>
+
+      <forward>1 0 0</forward>
+      <upward>0 0 1</upward>
+
+      <link_name>base_link</link_name>
+
+      <cp>-0.18961 -0.08444 0</cp>
+
+    </plugin>
+
+    <plugin
+      filename="gz-sim-thruster-system"
+      name="gz::sim::systems::Thruster">
+
+      <namespace>auv</namespace>
+      <joint_name>left_propeller_joint</joint_name>
+
+      <fluid_density>1000</fluid_density>
+      <propeller_diameter>0.05</propeller_diameter>
+
+      <max_thrust_cmd>19.6</max_thrust_cmd>
+      <min_thrust_cmd>-19.6</min_thrust_cmd>
+
+    </plugin>
+
+    <plugin
+      filename="gz-sim-thruster-system"
+      name="gz::sim::systems::Thruster">
+
+      <namespace>auv</namespace>
+
+      <joint_name>right_propeller_joint</joint_name>
+
+      <fluid_density>1000</fluid_density>
+      <propeller_diameter>0.05</propeller_diameter>
+
+      <max_thrust_cmd>19.6</max_thrust_cmd>
+      <min_thrust_cmd>-19.6</min_thrust_cmd>
+
+    </plugin>
+
+    <plugin filename="gz-sim-odometry-publisher-system"
+          name="gz::sim::systems::OdometryPublisher">
+
+      <odom_frame>world</odom_frame>
+      <robot_base_frame>base_link</robot_base_frame>
+
+      <odom_publish_frequency>50</odom_publish_frequency>
+
+      <dimensions>3</dimensions>
+
+      <odom_topic>/auv/odom</odom_topic>
+
+    </plugin>
+
+    <!-- ========================= -->
+    <!-- Hydrodynamic damping      -->
+    <!-- ========================= -->
+
+    <plugin
+      filename="gz-sim-hydrodynamics-system"
+      name="gz::sim::systems::Hydrodynamics">
+
+      <link_name>base_link</link_name>
+
+      <!-- Linear damping -->
+      <xU>0.0</xU>
+      <yV>-0.0</yV>
+      <zW>-0.0</zW>
+
+      <kP>-0.0</kP>
+      <mQ>-0.0</mQ>
+      <nR>-0.0</nR>
+
+      <!-- Quadratic damping -->
+      <xUabsU>-5.0</xUabsU>
+      <yVabsV>-76.0</yVabsV>
+      <zWabsW>-76.0</zWabsW>
+
+      <kPabsP>-0.01</kPabsP>
+      <mQabsQ>-9.9</mQabsQ>
+      <nRabsR>-9.9</nRabsR>
+
+    </plugin>
+
+    <!-- ========================= -->
+    <!-- Left elevator hydrodynamics -->
+    <!-- ========================= -->
+
+    <plugin
+      filename="gz-sim-lift-drag-system"
+      name="gz::sim::systems::LiftDrag">
+
+      <air_density>1000</air_density>
+
+      <cla>1.9</cla>
+      <cla_stall>-1.1</cla_stall>
+
+      <cda>0.2</cda>
+      <cda_stall>0.03</cda_stall>
+
+      <alpha_stall>0.17</alpha_stall>
+
+      <a0>0</a0>
+
+      <area>0.01875</area>
+
+      <forward>1 0 0</forward>
+      <upward>0 0 1</upward>
+
+      <link_name>left_fin</link_name>
+
+      <cp>0.005 -0.060 0</cp>
+
+    </plugin>
+
+
+    <!-- ========================= -->
+    <!-- Right elevator hydrodynamics -->
+    <!-- ========================= -->
+
+    <plugin
+      filename="gz-sim-lift-drag-system"
+      name="gz::sim::systems::LiftDrag">
+
+      <air_density>1000</air_density>
+
+      <cla>1.9</cla>
+      <cla_stall>-1.1</cla_stall>
+
+      <cda>0.2</cda>
+      <cda_stall>0.03</cda_stall>
+
+      <alpha_stall>0.17</alpha_stall>
+
+      <a0>0</a0>
+
+      <area>0.01875</area>
+
+      <forward>1 0 0</forward>
+      <upward>0 0 1</upward>
+
+      <link_name>right_fin</link_name>
+
+      <cp>0.005 0.060 0</cp>
+
+    </plugin>
+
+  </gazebo>
+
+</robot>
